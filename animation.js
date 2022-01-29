@@ -1,4 +1,44 @@
- //adding scene and camera per three.js documentaion. Played around with position
+ // fix animate function: keeps removing box infinitely, uses global variables directly and indirectly
+ // TODO LIST: 1. default values for function inputs, 2. check all variable and function names 3. messages for user 4. switch statement 5. open with html direct
+ 
+ //list of basic yz orientations
+orientationsList = [ [0,0] , [0,Math.PI/2] , [0,Math.PI*3/2] , [Math.PI/2,0], [Math.PI,0] , [Math.PI*3/2,0] ];
+  //random numbers to dictate orientations for cubes A & B: 0-->Red  1-->Yellow  2-->Blue  3-->Purple  4-->Green  5-->Black
+randomOrientationA = Math.floor(Math.random() * (6 - 0) + 0);
+randomOrientationB = Math.floor(Math.random() * (6 - 0) + 0);
+isSameColor = randomOrientationA==randomOrientationB;
+cubeBIsBlack = randomOrientationB==5;
+cubeBIsRed = randomOrientationB==0;
+cubeBIsGreen = randomOrientationB==4;
+cubeBIsBlue = randomOrientationB==2;
+cubeBIsYellow = randomOrientationB==1;
+cubeBIsPurple = randomOrientationB==3;
+ //random numbers to dictate random trajectory
+randomTrajectoryX = Math.random() * (1 + 1) - 1;
+randomTrajectoryY = Math.random() * (1 + 1) - 1;
+randomTrajectoryZ = Math.random() * (1 + 1) - 1;
+ //cube size and initial speeds
+cubeSize = 1
+speedAX = 0.02;
+speedBX = -0.02;
+
+function moveCube(cube, speed){
+    cube.position.x += speed;
+}
+function moveRandom(cube){
+    cube.position.x += randomTrajectoryX;
+    cube.position.y += randomTrajectoryY;
+    cube.position.z += randomTrajectoryZ;
+}
+function positionCube( cube, position, size, orientation1, orientation2 ){
+    cube.position.x = position*size;
+    cube.rotation.y = orientation1;
+    cube.rotation.z = orientation2;
+}
+function noCollision(cube,size){
+    return cube.position.x>size/2;
+}
+ //adding scene and camera as per three.js documentaion. Played around with camera position
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.5, 1000);
 camera.position.z = 5;
@@ -7,43 +47,8 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 scene.background = new THREE.Color(0x808080);
- //list of basic yz orientations
-angleListYZ = [ 
-    [0 , 0], 
-    [0 , Math.PI/2],
-    [0 , Math.PI*3/2],
-    [Math.PI/2 , 0],
-    [Math.PI , 0],
-    [Math.PI*3/2 , 0]
- ];
-  //random numbers to dictate orientations for cubes A & B: 0-->Red  1-->Yellow  2-->Blue  3-->Purple  4-->Green  5-->Black
-randomIntegerYZA = Math.floor(Math.random() * (6 - 0) + 0);
-randomIntegerYZB = Math.floor(Math.random() * (6 - 0) + 0);
- //creating booleans
-isSameColor = randomIntegerYZA==randomIntegerYZB;
-cubeBIsBlack = randomIntegerYZB==5;
-cubeBIsRed = randomIntegerYZB==0;
-cubeBIsGreen = randomIntegerYZB==4;
-cubeBIsBlue = randomIntegerYZB==2;
-cubeBIsYellow = randomIntegerYZB==1;
-cubeBIsPurple = randomIntegerYZB==3;
- //random numbers to dictate random trajectory
-randomTrajectoryX = Math.random() * (1 + 1) - 1;
-randomTrajectoryY = Math.random() * (1 + 1) - 1;
-randomTrajectoryZ = Math.random() * (1 + 1) - 1;
-
-function moveCube(cube1, speed1){
-    cube1.position.x += speed1;
-}
-
  //creating a cube
-size = 1
-const geometry = new THREE.BoxGeometry(size,size,size);
-
-/*for ( var i = 0; i < geometry.faces.length; i++){
-    geometry.faces[i].color.setHex ( Math.random() * 0xffffff);
-}*/
-
+const geometry = new THREE.BoxGeometry(cubeSize,cubeSize,cubeSize);
  //loading six images for cube A and creating a texture array
 var textureAllA = [];
 var  texture1A = new THREE.TextureLoader().load("colorImages/redA.png");
@@ -74,32 +79,16 @@ textureAllB.push(new THREE.MeshBasicMaterial( { map: texture5B } ));
 textureAllB.push(new THREE.MeshBasicMaterial( { map: texture6B } )); 
 
 const cubeA = new THREE.Mesh( geometry, textureAllA );
- //const cubeA = new THREE.MeshBasicMaterial( geometry, { color: 0xffffff, vertexColors: true } );
-cubeA.position.x = -3*size
-cubeA.rotation.y = angleListYZ[randomIntegerYZA][0];
-cubeA.rotation.z = angleListYZ[randomIntegerYZA][1];
-speedAX = 0.02;
-speedAY = 0;
-speedAZ = 0;
-
-
-
 const cubeB = new THREE.Mesh( geometry, textureAllB );
-cubeB.position.x = 3*size
-cubeB.rotation.y = angleListYZ[randomIntegerYZB][0];
-cubeB.rotation.z = angleListYZ[randomIntegerYZB][1];
-speedBX = -0.02;
-speedBY = 0;
-speedBZ = 0;
-
- //creating a scene and animation
+positionCube(cubeA, -3, cubeSize, orientationsList[randomOrientationA][0], orientationsList[randomOrientationA][1] );
+positionCube(cubeB, 3, cubeSize, orientationsList[randomOrientationB][0], orientationsList[randomOrientationB][1]) ;
 scene.add( cubeA, cubeB );
 
 function animate() {
 	requestAnimationFrame( animate );
 	renderer.render( scene, camera );
-    
-    if(cubeB.position.x>(size/2)) {
+
+    if(noCollision(cubeB, cubeSize)) {
         moveCube(cubeA, speedAX);
         moveCube(cubeB, speedBX);
     } else if(isSameColor) {
@@ -115,9 +104,7 @@ function animate() {
     } else if(cubeBIsYellow){
         moveCube(cubeA, speedAX/2);
     } else if(cubeBIsPurple){
-        cubeA.position.x += randomTrajectoryX;
-        cubeA.position.y += randomTrajectoryY;
-        cubeA.position.z += randomTrajectoryZ;
+        moveRandom(cubeA);
     } else{
         
     }
