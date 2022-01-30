@@ -7,12 +7,11 @@ This code renders two cubes that interact with each other. The goal of this proj
 3. Add the folder to an environment such as VSCode.
 4. Right click on the .html file within VSCode and select "Run with Live Server".
 5. Refresh the webpage as needed.
-
 ## Initial Problem
 1. Set up a 3D environment where two cubes travel toward each other. 
 2. Cube A and cube B are colored similarly. Each cube has a red, green, blue, yellow, purple and a black face.
 3. The starting orientation of each cube is randomized independently.
-The outcomes of the collisions are shown in the image titled "scenariosSummary".
+The outcomes of the collisions are shown in the image titled "outcomesSummary" in the repository.
 ## Assumptions
 Cube A's starting position is on the left side of the screen and cube B's starting position is on the right side of the screen. Using this assumption, we can detect a collision when cube B's x position is less than half its size.
 Not all 24 orientations of the cubes are needed for this excersise. We only use six orientations per cube so that we have all 36 outcomes.
@@ -24,7 +23,11 @@ Some basic 3D geometry consepts were used as well. For example, a list of basic 
 const orientationsList = [ [0,0] , [0,Math.PI/2] , [0,Math.PI*3/2] , [Math.PI/2,0], [Math.PI,0] , [Math.PI*3/2,0] ];
 
 Using the [0,0] transformation leaves the cube in it's default position where its red side faces the other cube. Using the [0,Math.PI/2] transformation causes the cube to rotate by 90 degrees along the z-axis causing its yellow side to face the other cube.
-
-## How the Colors Were Applied
-
 ## Solution Formulation
+1. Discovered three.js
+2. Used code from the "documentaion" section in the "threejs.org" website to create the scene, camera, rendered and the two cubes.
+3. Applied colors to the cube faces.
+4. Understood the "cube.rotation.y" and the "cube.rotation.z" methods to generate six random initial orientations per cube so that all 36 color combinations are generated randomly.
+5. Understoof the "cube.position.x" method to move the cubes toward eachother.
+## How the Colors Were Applied
+In order to label the cubes uniquely, I applied the colors as textures. Each texture is loaded from a .png file.
