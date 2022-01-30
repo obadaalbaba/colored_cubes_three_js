@@ -31,3 +31,4 @@ Using the [0,0] transformation leaves the cube in it's default position where it
 5. Understoof the "cube.position.x" method to move the cubes toward eachother.
 ## How the Colors Were Applied
 In order to label the cubes uniquely, I applied the colors as textures. Each texture is loaded from a .png file.
+## Limitations and Future Work
