@@ -7,11 +7,19 @@ This code renders two cubes that interact with each other. The goal of this proj
 3. Right click on the .html file within VSCode and select "Run with Live Server".
 4. Refresh the webpage as needed.
 5. You can run the application on heroku as well: https://cube-animation-three-js.herokuapp.com/
+## The Code
+The code is seperated into multiple files:
+1. index.html depends on four javascript (.js) files.
+2. three.js is a library downloaded from the web. It does all the heavy lifting.
+3. constants.js contains all the unchanging variables
+4. functions.js contains all the functions
+5. main.js contains the code that executes all the actions. It depens on the three other javascript files.
 ## Initial Problem
 1. Set up a 3D environment where two cubes travel toward each other. 
 2. Cube A and cube B are colored similarly. Each cube has a red, green, blue, yellow, purple and a black face.
 3. The starting orientation of each cube is randomized independently.
 The outcomes of the collisions are shown in the image titled "outcomesSummary" in the repository.
+![image](https://user-images.githubusercontent.com/64380720/151727537-40f09313-623f-421c-a621-6afebec44f95.png)
 ## Assumptions
 Cube A's starting position is on the left side of the screen and cube B's starting position is on the right side of the screen. Using this assumption, we can detect a collision when cube B's x position is less than half its size.
 Not all 24 orientations of the cubes are needed for this excersise. We only use six orientations per cube so that we have all 36 outcomes.
