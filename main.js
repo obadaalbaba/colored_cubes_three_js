@@ -1,3 +1,4 @@
+//this file depends on constants and functions defined in the other files: constants.js & main.js
 //adding scene and camera as per three.js documentaion. Played around with camera positionconst scene = createScene(sceneColor = 0x808080);
 const scene = createScene(color=0x808080);
 const renderer = createRenderer();
