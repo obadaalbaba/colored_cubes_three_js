@@ -32,12 +32,34 @@ function createCube(cubeSize = 1, cubeName, colors) {
 
 function initializeCubeOrientation(cube, initialPosition ,colors ,flip=false) {
     //Initiate cube position
-    const color = getRandomColor(colors);
     cube.position.x = initialPosition;
-    cube.rotation.y = orientationsList[colors.indexOf(color)]['y'];
-    cube.rotation.z = orientationsList[colors.indexOf(color)]['z'];
+    const color = getRandomColor(colors);
+    cube.rotation.y = orientationsList[color]['y'];
+    cube.rotation.z = orientationsList[color]['z'];
     cube.color=color;
     if(flip==true){cube.rotation.y += Math.PI;}
+}
+
+function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+
+    if(noCollision(cubeB, cubeSize)) {
+        moveCube(cubeA, initialSpeed);
+        moveCube(cubeB, -initialSpeed);
+    } else if (cubeA.color == cubeB.color) {
+        scene.remove(cubeA, cubeB);
+    } else if (cubeB.color == 'black') {
+        scene.remove(cubeA);
+    } else if (cubeB.color == 'green') {
+        moveCube(cubeA, 2 * initialSpeed);
+    } else if (cubeB.color == 'blue') {
+        moveCube(cubeA, -initialSpeed);
+    } else if (cubeB.color == 'yellow') {
+        moveCube(cubeA, initialSpeed / 2);
+    } else if (cubeB.color == 'purple') {
+        moveRandom(cubeA);
+    }
 }
 
 function getRandomColor(colors) {
@@ -46,28 +68,6 @@ function getRandomColor(colors) {
 
 function randomNumber(upperLimmit, lowerLimit) {
     return Math.random() * (upperLimmit - lowerLimit) + lowerLimit;
-}
-
-function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-
-    if(noCollision(cubeB, cubeSize)) {
-        moveCube(cubeA, initialSpeedAX);
-        moveCube(cubeB, initialSpeedBX);
-    } else if (cubeA.color == cubeB.color) {
-        scene.remove(cubeA, cubeB);
-    } else if (cubeB.color == 'black') {
-        scene.remove(cubeA);
-    } else if (cubeB.color == 'green') {
-        moveCube(cubeA, 2 * initialSpeedAX);
-    } else if (cubeB.color == 'blue') {
-        moveCube(cubeA, -initialSpeedAX);
-    } else if (cubeB.color == 'yellow') {
-        moveCube(cubeA, initialSpeedAX / 2);
-    } else if (cubeB.color == 'purple') {
-        moveRandom(cubeA);
-    }
 }
 
 function noCollision(cube, size = 1) {
@@ -79,7 +79,15 @@ function moveCube(cube, speed) {
 }
 
 function moveRandom(cube) {
-    cube.position.x += randomTrajectoryX;
-    cube.position.y += randomTrajectoryY;
-    cube.position.z += randomTrajectoryZ;
+    cube.position.x += randomTrajectory[0];
+    cube.position.y += randomTrajectory[1];
+    cube.position.z += randomTrajectory[2];
+}
+function vectorMagnitude(vector) {
+    return Math.sqrt(Math.pow(vector[0],2)+Math.pow(vector[1],2)+Math.pow(vector[2],2));
+}
+function getRandomTrajectory(initialSpeed) {
+    var randomTrajectory = [randomNumber(1, -1), randomNumber(1, -1), randomNumber(1, -1)];
+    const magnitudeTrajectory = vectorMagnitude(randomTrajectory);
+    return randomTrajectory.map(function(item) {return item*initialSpeed/magnitudeTrajectory});
 }

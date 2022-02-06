@@ -12,8 +12,6 @@ initializeCubeOrientation(cubeB, initialPosition = 3, colors, flip=true);
 //Adding Cubes to the scene
 scene.add(cubeA, cubeB);
 //random trajectory speeds
-const randomTrajectoryX = randomNumber(1, -1);
-const randomTrajectoryY = randomNumber(1, -1);
-const randomTrajectoryZ = randomNumber(1, -1);
+randomTrajectory = getRandomTrajectory(initialSpeed);
 //Animate
 animate();
