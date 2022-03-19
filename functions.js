@@ -87,7 +87,7 @@ function vectorMagnitude(vector) {
     return Math.sqrt(Math.pow(vector[0],2)+Math.pow(vector[1],2)+Math.pow(vector[2],2));
 }
 function getRandomTrajectory(initialSpeed) {
-    var randomTrajectory = [randomNumber(1, -1), randomNumber(1, -1), randomNumber(1, -1)];
+    let randomTrajectory = [randomNumber(1, -1), randomNumber(1, -1), randomNumber(1, -1)];
     const magnitudeTrajectory = vectorMagnitude(randomTrajectory);
     return randomTrajectory.map(function(item) {return item*initialSpeed/magnitudeTrajectory});
 }
